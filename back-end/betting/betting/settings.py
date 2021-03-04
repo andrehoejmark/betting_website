@@ -72,10 +72,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'betting.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-
 # https://www.dev2qa.com/how-to-connect-mysql-database-in-django-project/
 DATABASES = {
     'default': {
@@ -89,11 +85,6 @@ DATABASES = {
         'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",},
     }
 }
-
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -110,39 +101,29 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#Inspiration https://github.com/RamanpreetKaur99/backendd/
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
+}
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
+ACCOUNT_FORMS = {
+'signup': 'users.forms.MyCustomSignupForm',
+}
+
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
 STATIC_URL = '/static/'
-
 
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'jwt-auth'
 
-AUTH_USER_MODEL = 'users.User'
-
-# Configuration Settings for allauth
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-
-
-ACCOUNT_FORMS = {'signup': 'users.forms.SignupForm'}
-#ACCOUNT_SIGNUP_FORM_CLASS = "users.forms.SignupForm"
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_VERIFICATION ="none"
+AUTH_USER_MODEL = 'users.MyUser'
