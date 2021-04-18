@@ -4,7 +4,7 @@ from .models import BankIDAuthentication
 
 class BankIDAuthenticationSerializer(serializers.Serializer):
 
-    end_user_ip = serializers.CharField(max_length=255)
+    #end_user_ip = serializers.CharField(max_length=255)
     personal_number = serializers.CharField(max_length=255)
     type_of_authentication = serializers.CharField(max_length=3)
 

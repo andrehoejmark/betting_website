@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 
     'users',
     'bankID',
@@ -49,7 +50,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+# Used to be able to allow requests from react locally to django locally. https://www.geeksforgeeks.org/how-to-enable-cors-headers-in-your-django-project/
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 ROOT_URLCONF = 'betting.urls'
 
@@ -102,12 +108,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 #Inspiration https://github.com/RamanpreetKaur99/backendd/
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
-}
+#REST_AUTH_REGISTER_SERIALIZERS = {
+#    'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
+#}
 
 ACCOUNT_FORMS = {
-'signup': 'users.forms.MyCustomSignupForm',
+    'signup': 'users.forms.MyCustomSignupForm',
 }
 
 
@@ -120,10 +126,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-REST_USE_JWT = True
-JWT_AUTH_COOKIE = 'jwt-auth'
+#REST_USE_JWT = True
+#JWT_AUTH_COOKIE = 'jwt-auth'
 
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_EMAIL_VERIFICATION ="none"
+ACCOUNT_EMAIL_REQUIRED = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+ACCOUNT_AUTHENTICATION_METHOD = 'both'
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_UNIQUE_EMAIL=True
+
 AUTH_USER_MODEL = 'users.MyUser'
+
+

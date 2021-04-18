@@ -1,0 +1,2 @@
+npm install --save react-fontawesome
+npm i --save bootstrap jquery popper.js // was needed to make dropdown work with react

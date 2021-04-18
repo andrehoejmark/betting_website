@@ -6,6 +6,10 @@ from .serializers import BankIDCollectSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from betting.settings import BASE_DIR
+from ipware import get_client_ip
+
+from .models import BankIDAuthentication
+
 
 """ COMMENTS
     - Not including if the parameters were correct or not etc because it isn't recommended from documentation most likely a security thingie
@@ -20,8 +24,8 @@ class Authenticate(APIView):
 
         if serializer.is_valid():
             try:
-            
-                end_user_ip = serializer.data.get('end_user_ip')
+                end_user_ip, is_routable = get_client_ip(request)
+                print(end_user_ip)
                 personal_number = serializer.data.get('personal_number')
                 
                 client = BankIDJSONClient(certificates=(os.path.join(BASE_DIR, 'bankID\certificate.pem'),
@@ -30,6 +34,8 @@ class Authenticate(APIView):
                 
                 response = client.authenticate(end_user_ip=end_user_ip,
                                     personal_number=personal_number)
+
+                print(response)
 
             except bankid.exceptions.AlreadyInProgressError as e:
                 return Response({"CODE": "ALREADY_IN_PROGRESS", "Reason": "Failure to create new order due to one already in progress"})
@@ -74,19 +80,53 @@ class OrderStatus(APIView):
         serializer = BankIDCollectSerializer(data=request.data)
 
         if serializer.is_valid():
-            
             try:
                 order_ref = serializer.data.get('order_ref')
                 client = BankIDJSONClient(certificates=(os.path.join(BASE_DIR, 'bankID\certificate.pem'),
                                                             os.path.join(BASE_DIR, 'bankID\key.pem')),
                                                             test_server=True)
                 order_status = client.collect(order_ref=order_ref)
+                print("order_status: " + str(order_status))
+                # order_status = {'orderRef': '57bb0666-d2a6-4222-8798-40e2dda101bc', 'status': 'failed', 'hintCode': 'expiredTransaction'}
+                
+                if order_status:
 
-                return Response(order_status)
+                    # Create a new object bankID schema
+                    if order_status.get('status') == 'complete':
+                        
+                        order_ref = order_status.get('orderRef')
+
+                        data = order_status.get('completionData')
+
+                        first_name = data.get("user").get("givenName")
+                        last_name = data.get("user").get("surname")
+                        p_num = data.get("user").get("personalNumber")
+                        ip_address = data.get('device').get('ipAddress')
+                        signature = data.get('signature')
+                        ocspResponse = data.get('ocspResponse')
+
+                        try:
+
+                            b = BankIDAuthentication(order_ref=order_ref,
+                                                    type_of_authentication="REG",
+                                                    first_name=first_name,
+                                                    last_name=last_name,
+                                                    p_number=p_num,
+                                                    ip_address=ip_address,
+                                                    signature=signature,
+                                                    ocspResponse=ocspResponse)
+                            b.save()
+
+                        except Exception as e:
+                            print(e)
+                        
+                        
+                        return Response({"status":"Complete"})
+
+                return Response({"status":"Failed"})
 
             except bankid.exceptions.AlreadyInProgressError as e:
                 return Response({"CODE": "ALREADY_IN_PROGRESS", "Reason": "Failure to create new order due to one already in progress"})
-
             
             except bankid.exceptions.CancelledError:
                 return Response({"CODE": "CANCELLED", "Reason": "The order was cancelled. The system received a new order for the user." })
@@ -114,8 +154,9 @@ class OrderStatus(APIView):
                 return Response({"CODE": "USER_CANCEL", "Reason": "The user decided to cancel the order."})
 
             except Exception as e:
+                print(e)
                 return Response({"CODE": "Not Found", "Reason": "Exception not found"})
-            
+
         return Response(serializer.errors)
 
 

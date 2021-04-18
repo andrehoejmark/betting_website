@@ -38,7 +38,7 @@ class MyCustomSignupForm(forms.Form):
         user.save()
         print('cats4')
         return {"cat"}#user
-'''
+
 
 from allauth.account.forms import SignupForm, LoginForm
 from django.core.validators import RegexValidator
@@ -57,3 +57,5 @@ class MyCustomSignupForm(SignupForm):
         user.last_name = self.cleaned_data['last_name']
         user.save()
         return user
+
+'''

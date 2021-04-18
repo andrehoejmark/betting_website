@@ -26,3 +26,5 @@ sqlparse
 urllib3
 dj-rest-auth
 Pillow
+django-ipware
+django-cors-headers
