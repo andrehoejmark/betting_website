@@ -56,6 +56,7 @@ class NavBar extends React.Component{
 
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         <button onClick={this.logout} className="dropdown-item" href="#">Edit Profile</button>
+                                        <button onClick={this.logout} className="dropdown-item" href="#">View Transactions</button>
                                         <button onClick={this.logout} className="dropdown-item" href="#">Logout</button>
                                         </div>
 
@@ -94,17 +95,19 @@ const Wrapper = styled.div`
 .navbar{
     background-color:  #292b2c;
 }
+
 .username{
     color:white;
 }
 
 .fa{
     color: white;
-    font-size: 24px
+    font-size: 24px;
 }
 
-
-
+.navbar-brand:hover{
+    cursor: pointer;
+}
 `
 
 const mapDispatchToProps = dispatch => {

@@ -6,7 +6,8 @@ import NavBar from "../components/NavBar/NavBar"
 import LoginWindow from "../components/Login/LoginWindow"
 import RegisterWindow from "../components/Signup/RegisterWindow"
 
-import Sidebar from "../components/Sidebar/Sidebar"
+import MainContent from "../components/MainContent"
+
 
 class HomePage extends React.Component {
 
@@ -44,7 +45,8 @@ class HomePage extends React.Component {
                 <NavBar toggle_login_window_handler={this.toggle_login_window} toggle_register_window_handler={this.toggle_register_window} isAuthenticated={this.props.isAuthenticated}/>
                 <LoginWindow toggle_login_window_handler={this.toggle_login_window} isVisible={this.state.login_window_visible} isAuthenticated={this.props.isAuthenticated}/>
                 <RegisterWindow toggle_register_window_handler={this.toggle_register_window} isVisible={this.state.register_window_visible} isAuthenticated={this.props.isAuthenticated}/>
-                <Sidebar isAuthenticated={this.props.isAuthenticated}/>
+                
+                <MainContent isAuthenticated={this.props.isAuthenticated}/>
 
             </div>
         )

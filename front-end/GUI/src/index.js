@@ -14,7 +14,7 @@ import { Provider } from 'react-redux'
 import thunk from "redux-thunk"
 // END REDUX AUTH
 
-import {ThemeContextProvider} from './components/ThemeContext'
+
 
 
 const composeEnhances = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
@@ -25,12 +25,10 @@ const store = createStore(reducer, composeEnhances(
 
 
 ReactDom.render(
-	<ThemeContextProvider>
 		<Provider store={store}>
 			<Router>
 				<App/>
 			</Router>
-		</Provider>
-	</ThemeContextProvider>,
+		</Provider>,
   document.getElementById("root")
 )

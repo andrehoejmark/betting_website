@@ -11,15 +11,14 @@ export default class Sidebar extends React.Component{
 
     constructor(props){
         super(props)
-
     }
 
     render(){
 
             return(
 
-                <Wrapper>
-                    <div className="menu" style={{width: this.props.isAuthenticated ?  "280px": "0px"}}>
+                <Wrapper style={{display: this.props.isAuthenticated ? 'flex' : 'none'}}>
+                    <div className="menu">
 
                         <div className="menu-items">
                             <div className="menu-item">
@@ -55,13 +54,10 @@ export default class Sidebar extends React.Component{
 const Wrapper = styled.div`
 
 .menu{
-    position: fixed;
-    
-    height: 94.5vh;
+    height: 94.7vh;
     background-color: #292b2c;
-
     font-size: 18px;
-    
+    width: 280px;
 }
 
 .menu-items{
@@ -74,7 +70,6 @@ const Wrapper = styled.div`
     margin-left:20px;
     margin-right:15px;
     border-radius: 4px;
-    
 }
 
 .text{
